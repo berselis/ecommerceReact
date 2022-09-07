@@ -10,6 +10,7 @@ const ShoppingCart = () => {
     const [total, setTotal] = useState(0.00);
     const [checkOut, setCheckOut] = useState(false);
     const userSession = getConfig();
+    const [rem, setRem] = useState()
 
     useEffect(() => {
         if (userSession) {
@@ -26,7 +27,7 @@ const ShoppingCart = () => {
                     setTotal(subTotal + 25 + tax);
                 }).catch(error => console.log(error))
         }
-    }, [checkOut]);
+    }, [checkOut, rem]);
 
 
     const handlerPurchases = () => {
@@ -49,6 +50,22 @@ const ShoppingCart = () => {
                     setCheckOut(true);
                 }).catch(error => console.log(error))
         }
+    }
+
+    const handlePlus = () => {
+
+    }
+
+    const handleMinus = () => {
+
+    }
+
+    const handleRemove = (id) => {
+        const URL = `https://ecommerce-api-react.herokuapp.com/api/v1/cart/${id}`;
+        axios.delete(URL, userSession)
+            .then(() => {
+                setRem(id)
+            }).catch(error => console.log(error))
     }
 
     return (
@@ -85,10 +102,21 @@ const ShoppingCart = () => {
                                         <tbody className="align-middle">
                                             {
                                                 cart?.products.map(item => {
+                                                    console.log(item);
                                                     const price = parseFloat(item.price);
                                                     const quantity = parseFloat(item.productsInCart.quantity);
                                                     const totalItem = price * quantity;
-                                                    return <Item key={item.productsInCart.id} title={item.title} price={price} quantity={quantity} total={totalItem} />
+                                                    const row = {
+                                                        id: item.id,
+                                                        title: item.title,
+                                                        price: price,
+                                                        quantity: quantity,
+                                                        totalItem: totalItem,
+                                                        plus: handlePlus,
+                                                        minus: handleMinus,
+                                                        remove: handleRemove
+                                                    }
+                                                    return <Item key={item.productsInCart.id} item={row} />
                                                 })
                                             }
 

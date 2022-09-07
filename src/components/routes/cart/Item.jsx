@@ -1,7 +1,10 @@
 import React from 'react';
 
 
-const Item = ({title, price, quantity, total}) => {
+const Item = ({item}) => {
+    const {id, title, price, quantity, totalItem, plus, minus, remove} = item;
+
+
     return (
         <tr>
             <td>
@@ -17,8 +20,8 @@ const Item = ({title, price, quantity, total}) => {
                     <button className="btn-plus"><i className="fa fa-plus"></i></button>
                 </div>
             </td>
-            <td>{total}</td>
-            <td><button><i className="fa fa-trash"></i></button></td>
+            <td>{totalItem}</td>
+            <td><button onClick={() =>{remove(id)}}><i className="fa fa-trash"></i></button></td>
         </tr>
     )
 }

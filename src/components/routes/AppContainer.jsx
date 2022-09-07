@@ -6,6 +6,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { getConfig } from '../../utils/getConfig.js';
+import Search from './container/Search';
 let productsDB = [];
 
 const AppContainer = () => {
@@ -40,7 +41,7 @@ const AppContainer = () => {
   const hanlerAddProductToCart = (e) => {
     const userSession = getConfig();
     if (userSession) {
-      const id =parseInt(e.target.getAttribute('data-id-product'));
+      const id = parseInt(e.target.getAttribute('data-id-product'));
       const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/cart';
 
       const order = {
@@ -64,45 +65,12 @@ const AppContainer = () => {
           });
         })
 
-
-     
-
     } else {
       navigate('/login');
     }
   }
 
 
-  // useEffect(() => {
-  //   const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/users';
-  //   const user = {
-  //     "firstName": "Berselis",
-  //     "lastName": "Mendoza",
-  //     "email": "berselismendoza@gmail.com",
-  //     "password": "pass1234",
-  //     "phone": "1234567891",
-  //     "role": "admin"
-  //   };
-
-  //   axios.post(URL, user)
-  //     .then(res => console.log(res.data))
-  //     .catch(error => console.log(error))
-
-  // }, [])
-
-
-  //  const user = {
-  //     "status": "available",
-  //     "id": 1355,
-  //     "firstName": "Berselis",
-  //     "lastName": "Mendoza",
-  //     "email": "berselismendoza@gmail.com",
-  //     "phone": "1234567891",
-  //     "role": "admin"
-  // }
-
-  //console.log(productsDB);
-  //console.log(categorys);
 
   return (
     <>
@@ -114,17 +82,13 @@ const AppContainer = () => {
               <div className="sidebar-widget category">
                 <h2 className="title">Product</h2>
                 <div className="product-price-range">
-                  <div className="dropdown">
-                    <div className="dropdown-toggle" data-toggle="dropdown">Price range</div>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">$0 to $100</a>
-                      <a href="#" className="dropdown-item">$101 to $500</a>
-                      <a href="#" className="dropdown-item">$501 to $1000</a>
-                      <a href="#" className="dropdown-item">$1001 to up</a>
-                    </div>
-                  </div>
+                  <select className='select-price-range'>
+                    <option value={'ALL'}>-Price range-</option>
+                    <option value={'0 to 500'}> 0 to 500</option>
+                    <option value={'501 to 100'}> 501 to 100</option>
+                    <option value={'1001 to up'}> 1001 to up</option>
+                  </select>
                 </div>
-
               </div>
 
 
@@ -151,20 +115,10 @@ const AppContainer = () => {
 
             <div className="col-lg-8">
               <div className="row">
-                <div className="col-md-12">
-                  <div className="product-view-top">
-                    <div className="row">
 
-                      <div className="col-md-6 col-sm-8 col-xs-12">
-                        <form onSubmit={handlerSubmitByName} className="product-search">
-                          <input type="text" placeholder='Search...' />
-                          <button type='submit'><i className="bi bi-search"></i></button>
-                        </form>
-                      </div>
+                <Search handlerSubmitByName={handlerSubmitByName} />
 
-                    </div>
-                  </div>
-                </div>
+               
                 {
                   products?.map(product => (
                     <div key={product.id} className="col-md-4">

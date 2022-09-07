@@ -38,8 +38,6 @@ const Purchases = () => {
   return (
     <>
       <ModalPurchases isShow={showModal} itemsPurchases={itemsPurchases} handleCloseModal={handleCloseModal} />
-
-
       <div className="breadcrumb-wrap">
         <div className="container-fluid">
           <ul className="breadcrumb">

@@ -26,7 +26,6 @@ const ModalPurchases = ({ isShow, itemsPurchases, handleCloseModal }) => {
             <Modal.Footer>
             </Modal.Footer>
         </Modal>
-
     )
 }
 

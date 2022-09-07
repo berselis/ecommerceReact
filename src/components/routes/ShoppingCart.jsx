@@ -48,12 +48,8 @@ const ShoppingCart = () => {
                     });
                     setCheckOut(true);
                 }).catch(error => console.log(error))
-
-
-
         }
     }
-
 
     return (
         <>

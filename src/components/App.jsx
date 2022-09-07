@@ -8,6 +8,7 @@ import LogIn from './routes/LogIn';
 import SingUp from './routes/SignUp';
 import User from "./routes/User";
 import Purchases from "./routes/Purchases";
+import ShoppingCart from "./routes/ShoppingCart";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
             <Route element={<ProtectedRoutes />}>
               <Route path="/user" element={<User />} />
               <Route path="/purchases" element={<Purchases />} />
+              <Route path="/shoppingcart" element={<ShoppingCart/>} />
             </Route>
           </Routes>
         </section>

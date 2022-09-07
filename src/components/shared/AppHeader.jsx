@@ -4,17 +4,14 @@ import { NavLink } from 'react-router-dom';
 
 const AppHeader = () => {
 
-
   return (
     <div className="nav">
       <div className="container-fluid">
         <nav className="navbar navbar-expand-md bg-dark navbar-dark">
-        <NavLink to='/' className={'navbar-brand'}><h2>MENU</h2></NavLink>
-          <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span className="navbar-toggler-icon"></span>
-          </button>
+          <NavLink to='/' className={'navbar-brand'}></NavLink>
+         
 
-          <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+          <div className='navbar-collapse justify-content-between'>
             <div className="navbar-nav mr-auto">
               <NavLink to='/' className={'nav-item nav-link'}><h2>E-Commerce</h2></NavLink>
             </div>
@@ -30,18 +27,10 @@ const AppHeader = () => {
                   <span>Purchases</span>
                 </NavLink>
 
-                <a className="btn cart">
+                <NavLink to='/shoppingcart' className='btn cart'>
                   <i className="bi bi-cart"></i>
                   <span>Cart</span>
-                </a>
-              </div>
-              <div className="nav-item dropdown">
-
-                <div className="dropdown-menu">
-                  <button className='btn'>User</button>
-                  <button className='btn'>Purchases</button>
-                  <button className='btn'>Shopping cart</button>
-                </div>
+                </NavLink>
               </div>
             </div>
           </div>

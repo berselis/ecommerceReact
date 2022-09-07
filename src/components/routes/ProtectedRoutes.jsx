@@ -5,8 +5,8 @@ import { getConfig } from '../../utils/getConfig.js';
 
 
 export const ProtectedRoutes = () => {
-    const userConfig = getConfig();
-    if (userConfig) {
+    const userSession = getConfig();
+    if (userSession) {
         return (
             <Outlet />
         )

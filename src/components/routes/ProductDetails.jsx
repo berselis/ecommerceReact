@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getAllProducts } from '../../store/slices/products.slice';
+import { getConfig } from '../../utils/getConfig.js';
 import axios from 'axios';
+import swal from 'sweetalert';
+
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [id, setId] = useState(useParams().id)
   const [product, setProduct] = useState();
@@ -26,6 +30,44 @@ const ProductDetails = () => {
     const id = e.target.getAttribute('data-id');
     setId(id);
     setQuanty(1);
+  }
+
+  const handlerAddProductToCart = (e) => {
+    const userSession = getConfig();
+    if (userSession) {
+      const quanty = parseInt(document.getElementById('quanty').value);
+      const id = parseInt(e.target.getAttribute('data-id-product'));
+      const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/cart';
+
+      const order = {
+        id: id,
+        quantity: quanty
+      }
+     
+
+
+      axios.post(URL, order, userSession)
+        .then(res => {
+          swal({
+            text: "Item add to cart",
+            icon: "success",
+          });
+
+
+        }).catch(error => {
+          swal({
+            title: 'Ops! something wrong!',
+            text: error.toString(),
+            icon: "error",
+          });
+        })
+
+
+
+    } else {
+      navigate('/login');
+    }
+
   }
 
   useEffect(() => {
@@ -82,14 +124,17 @@ const ProductDetails = () => {
                         <h4>Quantity:</h4>
                         <div className="qty">
                           <button onClick={handlerMinus} className="btn-minus"><i className="fa fa-minus"></i></button>
-                          <input readOnly type="text" value={quanty} />
+                          <input id='quanty' readOnly type="text" value={quanty} />
                           <button onClick={handlerPlus} className="btn-plus"><i className="fa fa-plus"></i></button>
                         </div>
                       </div>
 
 
-                      <div className="action">
-                        <a className="btn"><i className="fa fa-shopping-cart"></i>Add to Cart</a>
+                      <div className="action product-price">
+                        <button onClick={handlerAddProductToCart} className='btn' data-id-product={product?.id}>
+                          <i className="bi bi-cart-fill"></i>
+                          Add to Cart
+                        </button>
                       </div>
                     </div>
                   </div>

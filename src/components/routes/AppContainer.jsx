@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../../store/slices/products.slice';
 import { getAllCategorys } from '../../store/slices/categorys.slice';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import swal from 'sweetalert';
+import { getConfig } from '../../utils/getConfig.js';
 let productsDB = [];
 
 const AppContainer = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const categorys = useSelector(state => state.categorys);
   productsDB = useSelector(state => state.products);
@@ -31,6 +34,41 @@ const AppContainer = () => {
     if (finder) {
       setProducts(productsDB.filter(prod => prod.title == finder))
       e.target.firstElementChild.value = '';
+    }
+  }
+
+  const hanlerAddProductToCart = (e) => {
+    const userSession = getConfig();
+    if (userSession) {
+      const id =parseInt(e.target.getAttribute('data-id-product'));
+      const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/cart';
+
+      const order = {
+        id: id,
+        quantity: 1
+      }
+
+      axios.post(URL, order, userSession)
+        .then(res => {
+          swal({
+            text: "Item add to cart",
+            icon: "success",
+          });
+
+
+        }).catch(error => {
+          swal({
+            title: 'Ops! something wrong!',
+            text: error.toString(),
+            icon: "error",
+          });
+        })
+
+
+     
+
+    } else {
+      navigate('/login');
     }
   }
 
@@ -62,10 +100,6 @@ const AppContainer = () => {
   //     "phone": "1234567891",
   //     "role": "admin"
   // }
-
-
-
-
 
   //console.log(productsDB);
   //console.log(categorys);
@@ -149,7 +183,10 @@ const AppContainer = () => {
                         </div>
                         <div className="product-price">
                           <h3><span>$</span>{product.price}</h3>
-                          <button className="btn"><i className="bi bi-cart-fill"></i>Add to Cart</button>
+                          <button onClick={hanlerAddProductToCart} data-id-product={product.id} className="btn">
+                            <i className="bi bi-cart-fill"></i>
+                            Add to Cart
+                          </button>
                         </div>
                       </div>
                     </div>

@@ -65,6 +65,39 @@ h2 {
 
 
 /**********************************/
+/******** Custom Swal *********/
+/**********************************/
+
+.swal-overlay {
+    background-color: #8b85d69c;
+}
+
+.swal-text {
+    color: #61534e;
+    font-size: 22px;
+  }
+
+.swal-footer {
+    background-color: rgb(245, 248, 250);
+    margin-top: 32px;
+    border-top: 1px solid #E9EEF1;
+    overflow: hidden;
+}
+
+.swal-button {
+    padding: 7px 19px;
+    border-radius: 2px;
+    background-color: #4962B3;
+    font-size: 12px;
+    border: 1px solid #3e549a;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
+    transition:all .3s ease
+}
+
+
+
+
+/**********************************/
 /********* Form Input CSS *********/
 /**********************************/
 .form-control,
@@ -106,6 +139,11 @@ h2 {
     color: #8b85d6;
     background: #ffffff;
     border: 1px solid #8b85d6;
+}
+
+.btn i,
+.bnt span {
+    pointer-events: none;
 }
 
 .btn:hover,
@@ -565,7 +603,7 @@ h2 {
 /********* Breadcrumb CSS *********/
 /**********************************/
 .breadcrumb-wrap {
-    margin-top:15px;
+    margin-top: 15px;
     position: relative;
     width: 100%;
 }
@@ -2260,9 +2298,10 @@ h2 {
     ;
 }
 
-.form-group .btn{
+.form-group .btn {
     width: 100%;
-    margin-bottom: 10px;;
+    margin-bottom: 10px;
+    ;
 }
 
 .login {
@@ -2307,7 +2346,7 @@ h2 {
     width: 80%;
 }
 
-.card-user .footer button{
+.card-user .footer button {
     width: 100%;
 }
 

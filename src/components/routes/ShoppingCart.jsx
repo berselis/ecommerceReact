@@ -24,7 +24,7 @@ const ShoppingCart = () => {
                     setSubTotal(subTotal);
                     const tax = subTotal * 0.25;
                     setTotal(subTotal + 25 + tax);
-                }).catch(error => console.log('peticion'))
+                }).catch(error => console.log(error))
         }
     }, [checkOut]);
 

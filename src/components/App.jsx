@@ -6,10 +6,8 @@ import { ProtectedRoutes } from "./routes/ProtectedRoutes";
 import ProductDetails from "./routes/ProductDetails";
 import LogIn from './routes/LogIn';
 import SingUp from './routes/SignUp';
-
-
-
-
+import User from "./routes/User";
+import Purchases from "./routes/Purchases";
 
 function App() {
 
@@ -27,14 +25,10 @@ function App() {
             <Route path="/signup" element={<SingUp />} />
 
             <Route element={<ProtectedRoutes />}>
-              <Route path="/user" element={<h1>User identification</h1>} />
-              <Route path="/purchases" element={<h1>User purchases</h1>} />
+              <Route path="/user" element={<User />} />
+              <Route path="/purchases" element={<Purchases />} />
             </Route>
           </Routes>
-
-
-
-
         </section>
 
       </main>

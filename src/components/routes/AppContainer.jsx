@@ -148,7 +148,7 @@ const AppContainer = () => {
                       </div>
                       <div className="product-price">
                         <h3><span>$</span>{product.price}</h3>
-                        <button className="btn"><i className="bi bi-cart-fill"></i>Buy Now</button>
+                        <button className="btn"><i className="bi bi-cart-fill"></i>Add to Cart</button>
                       </div>
                     </div>
                   </div>

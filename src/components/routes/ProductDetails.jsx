@@ -90,7 +90,6 @@ const ProductDetails = () => {
 
                       <div className="action">
                         <a className="btn"><i className="fa fa-shopping-cart"></i>Add to Cart</a>
-                        <a className="btn"><i className="fa fa-shopping-bag"></i>Buy Now</a>
                       </div>
                     </div>
                   </div>

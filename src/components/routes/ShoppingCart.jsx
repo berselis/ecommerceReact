@@ -1,7 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { getConfig } from '../../utils/getConfig.js';
+import axios from 'axios';
+import Item from './cart/Item.jsx';
 
 const ShoppingCart = () => {
+    const [cart, setCart] = useState();
+    const [subTotal, setSubTotal] = useState(0.00);
+    const [total, setTotal] = useState(0.00);
+    const [checkOut, setCheckOut] = useState(false);
+    const userSession = getConfig();
+
+    useEffect(() => {
+        if (userSession) {
+            const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/cart';
+            axios.get(URL, userSession)
+                .then(res => {
+                    const cart = res.data.data.cart
+                    setCart(cart);
+                    const subTotal = cart.products.reduce((sum, next) => {
+                        return sum += parseFloat(next.price) * next.productsInCart.quantity;
+                    }, 0);
+                    setSubTotal(subTotal);
+                    const tax = subTotal * 0.25;
+                    setTotal(subTotal + 25 + tax);
+                }).catch(error => console.log('peticion'))
+        }
+    }, [checkOut]);
+
+
+    const handlerPurchases = () => {
+        if (userSession) {
+            const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/purchases';
+            const addressBook = {
+                street: "First St Julios",
+                colony: "North SPM",
+                zipCode: 21000,
+                city: "DO",
+                references: "Big city"
+            }
+
+            axios.post(URL, addressBook, userSession)
+                .then(() => {
+                    swal({
+                        text: "Purchases Done!!",
+                        icon: "success",
+                    });
+                    setCheckOut(true);
+                }).catch(error => console.log(error))
+
+
+
+        }
+    }
+
+
     return (
         <>
             <div className="breadcrumb-wrap">
@@ -23,10 +76,10 @@ const ShoppingCart = () => {
                         <div className="col-lg-8">
                             <div className="cart-page-inner">
                                 <div className="table-responsive">
-                                    <table className="table table-bordered">
+                                    <table className="table">
                                         <thead className="thead-dark">
                                             <tr>
-                                                <th>Product</th>
+                                                <th className='item-cart-name'>Product</th>
                                                 <th>Price</th>
                                                 <th>Quantity</th>
                                                 <th>Total</th>
@@ -34,24 +87,15 @@ const ShoppingCart = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="align-middle">
-                                            <tr>
-                                                <td>
-                                                    <div className="img">
-                                                        <a href="#"><img src="img/product-1.jpg" alt="Image" /></a>
-                                                        <p>Product Name</p>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td>
-                                                    <div className="qty">
-                                                        <button className="btn-minus"><i className="fa fa-minus"></i></button>
-                                                        <input type="text" value={1} readOnly />
-                                                        <button className="btn-plus"><i className="fa fa-plus"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>$99</td>
-                                                <td><button><i className="fa fa-trash"></i></button></td>
-                                            </tr>
+                                            {
+                                                cart?.products.map(item => {
+                                                    const price = parseFloat(item.price);
+                                                    const quantity = parseFloat(item.productsInCart.quantity);
+                                                    const totalItem = price * quantity;
+                                                    return <Item key={item.productsInCart.id} title={item.title} price={price} quantity={quantity} total={totalItem} />
+                                                })
+                                            }
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -64,12 +108,13 @@ const ShoppingCart = () => {
                                         <div className="cart-summary">
                                             <div className="cart-content">
                                                 <h1>Cart Summary</h1>
-                                                <p>Sub Total<span>$99</span></p>
-                                                <p>Shipping Cost<span>$1</span></p>
-                                                <h2>Grand Total<span>$100</span></h2>
+                                                <p>Sub Total<span>{`$ ${subTotal}`}</span></p>
+                                                <p>Shipping Cost<span>$ 25</span></p>
+                                                <p>Taxes<span>25%</span></p>
+                                                <h2>Grand Total<span>{`$ ${total}`}</span></h2>
                                             </div>
                                             <div className="cart-btn">
-                                                <button className="btn">
+                                                <button onClick={handlerPurchases} className="btn">
                                                     <i className="bi bi-cart-check-fill"></i>
                                                     <span>Checkout</span>
                                                 </button>

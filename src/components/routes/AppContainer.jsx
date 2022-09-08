@@ -7,6 +7,10 @@ import axios from 'axios';
 import swal from 'sweetalert';
 import { getConfig } from '../../utils/getConfig.js';
 import Search from './container/Search';
+import Filter from './container/Filter';
+import Cateogry from './container/Cateogry';
+import ProductCard from './container/ProductCard';
+
 let productsDB = [];
 
 const AppContainer = () => {
@@ -97,86 +101,29 @@ const AppContainer = () => {
 
 
   return (
-    <>
-      <div className="product-view">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-4 sidebar">
+    <div className="product-view">
+      <div className="container-fluid">
+        <div className="row">
 
-              <div className="sidebar-widget category">
-                <h2 className="title">Product</h2>
-                <div className="product-price-range">
-                  <select onChange={handleFilter} className='select-price-range'>
-                    <option value={'ALL'}>-Price range-</option>
-                    <option data-min='0' data-max='500' value={'filter'}> 0 to 500</option>
-                    <option data-min='501' data-max='1000' value={'filter'}> 501 to 1000</option>
-                    <option data-min='1001' value={'up'}> 1001 to up</option>
-                  </select>
-                </div>
-              </div>
+          <div className="col-lg-4 sidebar">
+            <Filter handleFilter={handleFilter} />
+            <Cateogry categorys={categorys} handlerQuerybyPrice={handlerQuerybyPrice} />
+          </div>
 
+          <div className="col-lg-8">
+            <div className="row">
 
-              <div className="sidebar-widget category">
-                <h2 className="title">Category</h2>
-                <nav className="navbar bg-light">
-                  <ul onClick={handlerQuerybyPrice} className="navbar-nav">
-                    <a data-category='ALL' className="nav-link" href="#"><i className="bi bi-caret-right-fill"></i>All products</a>
-                    {
-                      categorys?.map(categ => (
-                        <li className="nav-item" key={categ.id}>
-                          <a data-category={categ.name} className="nav-link" href="#"><i className="bi bi-caret-right-fill"></i>{categ.name}</a>
-                        </li>
-                      ))
-                    }
+              <Search handlerSubmitByName={handlerSubmitByName} />
 
-                  </ul>
-                </nav>
-              </div>
+              {
+                products.map(product => <ProductCard key={product.id} product={product} hanlerAddProductToCart={hanlerAddProductToCart} />)
+              }
 
-
-            </div>
-
-
-            <div className="col-lg-8">
-              <div className="row">
-
-                <Search handlerSubmitByName={handlerSubmitByName} />
-
-                {
-                  products?.map(product => (
-                    <div key={product.id} className="col-md-4">
-                      <div className="product-item">
-                        <div className="product-title">
-                          <strong href="#">{product.title}</strong>
-
-                        </div>
-                        <div className="product-image">
-                          <img src={product.productImgs[0]} />
-                          <div className="product-action">
-                            <NavLink to={`/product/${product.id}`}>
-                              <i className="bi bi-search"></i>
-                            </NavLink>
-                          </div>
-                        </div>
-                        <div className="product-price">
-                          <h3><span>$</span>{product.price}</h3>
-                          <button onClick={hanlerAddProductToCart} data-id-product={product.id} className="btn">
-                            <i className="bi bi-cart-fill"></i>
-                            Add to Cart
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                }
-
-              </div>
             </div>
           </div>
         </div>
       </div>
-
-    </>
+    </div>
   )
 }
 

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const categorySlice = createSlice({
     name: 'categorys',
-    initialState: null,
+    initialState: [],
     reducers: {
         setCategorys: (state, action) => action.payload
     }

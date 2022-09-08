@@ -1,6 +1,10 @@
 /**********************************/
 /********** General CSS ***********/
 /**********************************/
+
+*{
+    user-select: none;
+}
 body {
     color: #353535;
     font-family: 'Open Sans', sans-serif;

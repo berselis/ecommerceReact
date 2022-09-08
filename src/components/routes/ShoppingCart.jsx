@@ -6,20 +6,20 @@ import Item from './cart/Item.jsx';
 import Summary from './cart/Summary.jsx';
 
 const ShoppingCart = () => {
-    const [cart, setCart] = useState();
+    const [products, setProducts] = useState([]);
     const [subTotal, setSubTotal] = useState(0.00);
     const [total, setTotal] = useState(0.00);
-    const [checkOut, setCheckOut] = useState(false);
     const userSession = getConfig();
     const [update, setUpdate] = useState()
 
     useEffect(() => {
         if (userSession) {
             const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/cart';
+
             axios.get(URL, userSession)
                 .then(res => {
                     const cart = res.data.data.cart
-                    setCart(cart);
+                    setProducts(cart.products);
                     const subTotal = cart.products.reduce((sum, next) => {
                         return sum += parseFloat(next.price) * next.productsInCart.quantity;
                     }, 0);
@@ -28,7 +28,7 @@ const ShoppingCart = () => {
                     setTotal(subTotal + 25 + tax);
                 }).catch(error => console.log(error))
         }
-    }, [checkOut, update]);
+    }, [update]);
 
 
     const handlerPurchases = () => {
@@ -44,11 +44,13 @@ const ShoppingCart = () => {
 
             axios.post(URL, addressBook, userSession)
                 .then(() => {
-                    setCheckOut(true);
                     swal({
                         text: "Purchases Done!!",
                         icon: "success",
                     });
+                    setProducts([]);
+                    setSubTotal(0);
+                    setTotal(0);
 
                 }).catch(error => console.log(error))
         }
@@ -115,7 +117,7 @@ const ShoppingCart = () => {
                                         </thead>
                                         <tbody className="align-middle">
                                             {
-                                                cart?.products.map(item => {
+                                                products.map(item => {
                                                     const price = parseFloat(item.price);
                                                     const quantity = parseFloat(item.productsInCart.quantity);
                                                     const totalItem = price * quantity;

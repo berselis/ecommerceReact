@@ -1,52 +1,70 @@
 import React from 'react';
 import { useForm } from 'react-hook-form'
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 const SignUp = () => {
   const { register, handleSubmit, reset } = useForm();
 
-  const onSubmit = (data) =>{
+  const onSubmit = (data) => {
     console.log(data)
+    const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/users';
+    axios.post(URL, data)
+      .then(() => {
+        swal({
+          text: "User created!!",
+          icon: "success",
+        });
+        reset();
 
-    reset();
+      }).catch(error => {
+        swal({
+          title: 'Ops! something wrong!!',
+          text: error.toString(),
+          icon: "error",
+        });
+      })
   }
 
   return (
-   <div className='container'>
+    <div className='container'>
       <div className='row'>
 
         <div className='form-layout'>
           <form onSubmit={handleSubmit(onSubmit)} className='row'>
 
             <h5><strong>Create new account</strong></h5>
+            
+
             <div className='col-m-12'>
               <div className='form-group'>
-                <input {...register('email')}  className='form-control' type='email' placeholder='Email' required/>
+                <input {...register('firstName')} className='form-control' type='text' placeholder='First name' required />
               </div>
             </div>
 
             <div className='col-m-12'>
               <div className='form-group'>
-                <input {...register('firstName')}  className='form-control' type='text' placeholder='First name' required/>
+                <input {...register('lastName')} className='form-control' type='text' placeholder='Last name' required />
               </div>
             </div>
 
             <div className='col-m-12'>
               <div className='form-group'>
-                <input {...register('lastName')}  className='form-control' type='text' placeholder='Last name' required/>
+                <input {...register('email')} className='form-control' type='email' placeholder='Email' required />
               </div>
             </div>
 
             <div className='col-m-12'>
               <div className='form-group'>
-                <input {...register('password')} className='form-control' type='password' placeholder='password' required/>
+                <input {...register('password')} className='form-control' type='password' placeholder='password' required />
               </div>
             </div>
 
             <div className='col-m-12'>
               <div className='form-group'>
-                <input {...register('phone')}  className='form-control' type='text' placeholder='Phone' required/>
-                <input {...register('role')} type='text' hidden value={'admin'}/>
+                <input {...register('phone')} className='form-control' type='text' placeholder='Phone' required />
+                <input {...register('role')} type='text' hidden value={'admin'} />
               </div>
             </div>
 

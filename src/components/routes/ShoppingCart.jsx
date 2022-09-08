@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { getConfig } from '../../utils/getConfig.js';
 import axios from 'axios';
 import Item from './cart/Item.jsx';
+import Summary from './cart/Summary.jsx';
 
 const ShoppingCart = () => {
     const [cart, setCart] = useState();
@@ -10,7 +11,7 @@ const ShoppingCart = () => {
     const [total, setTotal] = useState(0.00);
     const [checkOut, setCheckOut] = useState(false);
     const userSession = getConfig();
-    const [rem, setRem] = useState()
+    const [update, setUpdate] = useState()
 
     useEffect(() => {
         if (userSession) {
@@ -27,7 +28,7 @@ const ShoppingCart = () => {
                     setTotal(subTotal + 25 + tax);
                 }).catch(error => console.log(error))
         }
-    }, [checkOut, rem]);
+    }, [checkOut, update]);
 
 
     const handlerPurchases = () => {
@@ -43,20 +44,32 @@ const ShoppingCart = () => {
 
             axios.post(URL, addressBook, userSession)
                 .then(() => {
+                    setCheckOut(true);
                     swal({
                         text: "Purchases Done!!",
                         icon: "success",
                     });
-                    setCheckOut(true);
+
                 }).catch(error => console.log(error))
         }
     }
 
-    const handlePlus = () => {
+    const handlePlus = (obj) => {
+        const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/cart'
+        axios.patch(URL, obj, userSession)
+            .then(() => {
+                setUpdate(obj);
 
+            }).catch(error => console.log(error))
     }
 
-    const handleMinus = () => {
+    const handleMinus = (obj) => {
+        const URL = 'https://ecommerce-api-react.herokuapp.com/api/v1/cart'
+        axios.patch(URL, obj, userSession)
+            .then(() => {
+                setUpdate(obj);
+
+            }).catch(error => console.log(error))
 
     }
 
@@ -64,7 +77,7 @@ const ShoppingCart = () => {
         const URL = `https://ecommerce-api-react.herokuapp.com/api/v1/cart/${id}`;
         axios.delete(URL, userSession)
             .then(() => {
-                setRem(id)
+                setUpdate(id)
             }).catch(error => console.log(error))
     }
 
@@ -87,6 +100,7 @@ const ShoppingCart = () => {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-lg-8">
+
                             <div className="cart-page-inner">
                                 <div className="table-responsive">
                                     <table className="table">
@@ -102,7 +116,6 @@ const ShoppingCart = () => {
                                         <tbody className="align-middle">
                                             {
                                                 cart?.products.map(item => {
-                                                    console.log(item);
                                                     const price = parseFloat(item.price);
                                                     const quantity = parseFloat(item.productsInCart.quantity);
                                                     const totalItem = price * quantity;
@@ -124,29 +137,12 @@ const ShoppingCart = () => {
                                     </table>
                                 </div>
                             </div>
+
                         </div>
+
+
                         <div className="col-lg-4">
-                            <div className="cart-page-inner">
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <div className="cart-summary">
-                                            <div className="cart-content">
-                                                <h1>Cart Summary</h1>
-                                                <p>Sub Total<span>{`$ ${subTotal}`}</span></p>
-                                                <p>Shipping Cost<span>$ 25</span></p>
-                                                <p>Taxes<span>25%</span></p>
-                                                <h2>Grand Total<span>{`$ ${total}`}</span></h2>
-                                            </div>
-                                            <div className="cart-btn">
-                                                <button onClick={handlerPurchases} className="btn">
-                                                    <i className="bi bi-cart-check-fill"></i>
-                                                    <span>Checkout</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <Summary subTotal={subTotal} total={total} handlerPurchases={handlerPurchases} />
                         </div>
                     </div>
                 </div>

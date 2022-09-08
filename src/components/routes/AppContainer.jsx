@@ -52,14 +52,14 @@ const AppContainer = () => {
       axios.post(URL, order, userSession)
         .then(res => {
           swal({
-            text: "Item add to cart",
+            text: "Item added to cart!!",
             icon: "success",
           });
 
 
         }).catch(error => {
           swal({
-            title: 'Ops! something wrong!',
+            title: 'Ops! something wrong!!',
             text: error.toString(),
             icon: "error",
           });
@@ -68,6 +68,30 @@ const AppContainer = () => {
     } else {
       navigate('/login');
     }
+  }
+
+  const handleFilter = (e) => {
+    const option = e.target.options[e.target.options.selectedIndex];
+    const filter = option.value;
+    if (filter == 'ALL') {
+      setProducts(productsDB);
+      return
+    }
+
+    if (filter == 'filter') {
+      const min = parseFloat(option.getAttribute('data-min'));
+      const max = parseFloat(option.getAttribute('data-max'));
+      const productFilter = productsDB.filter(pro => min <= parseFloat(pro.price) && parseFloat(pro.price) <= max);
+      setProducts(productFilter);
+      return
+    }
+
+    const min = parseFloat(option.getAttribute('data-min'));
+    const productFilter = productsDB.filter(pro => parseFloat(pro.price) >= min);
+
+    setProducts(productFilter);
+
+
   }
 
 
@@ -82,11 +106,11 @@ const AppContainer = () => {
               <div className="sidebar-widget category">
                 <h2 className="title">Product</h2>
                 <div className="product-price-range">
-                  <select className='select-price-range'>
+                  <select onChange={handleFilter} className='select-price-range'>
                     <option value={'ALL'}>-Price range-</option>
-                    <option value={'0 to 500'}> 0 to 500</option>
-                    <option value={'501 to 100'}> 501 to 100</option>
-                    <option value={'1001 to up'}> 1001 to up</option>
+                    <option data-min='0' data-max='500' value={'filter'}> 0 to 500</option>
+                    <option data-min='501' data-max='1000' value={'filter'}> 501 to 1000</option>
+                    <option data-min='1001' value={'up'}> 1001 to up</option>
                   </select>
                 </div>
               </div>
@@ -118,7 +142,6 @@ const AppContainer = () => {
 
                 <Search handlerSubmitByName={handlerSubmitByName} />
 
-               
                 {
                   products?.map(product => (
                     <div key={product.id} className="col-md-4">

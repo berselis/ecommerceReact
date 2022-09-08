@@ -12,6 +12,19 @@ import ShoppingCart from "./routes/ShoppingCart";
 
 function App() {
 
+
+  function find_max(nums) {
+    let max_num = Number.NEGATIVE_INFINITY; // smaller than all other numbers
+    for (let num of nums) {
+      if (num > max_num) {
+        // (Fill in the missing line here)
+      }
+    }
+    return max_num;
+  }
+
+  console.log(find_max([25, 56, -8, 7, 5, 9, 87, 45, 0, 87, 6, 21, 45, .05]))
+
   return (
 
     <HashRouter>
@@ -28,7 +41,7 @@ function App() {
             <Route element={<ProtectedRoutes />}>
               <Route path="/user" element={<User />} />
               <Route path="/purchases" element={<Purchases />} />
-              <Route path="/shoppingcart" element={<ShoppingCart/>} />
+              <Route path="/shoppingcart" element={<ShoppingCart />} />
             </Route>
           </Routes>
         </section>
